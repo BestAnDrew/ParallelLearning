@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace ParallelLearning
 {
@@ -59,8 +60,29 @@ namespace ParallelLearning
 
             }
 
-        }
 
+            foreach (int i in Yeildbreak())
+                Console.WriteLine(i);
+
+
+            Expression<Func<int, bool>> test = i => i < 5;
+            
+            Console.Read();
+
+        }
+        static Random rand = new Random();
+        private static IEnumerable<int> Yeildbreak()
+        {
+            while (true)
+            {
+                var num = rand.Next(10);
+                if (num % 100 == 0)
+                    yield break;
+                yield return num;
+
+
+            }
+        }
 
         static void IncrementCount()
         {
