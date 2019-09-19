@@ -6,10 +6,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
+[assembly:log4net.Config.XmlConfigurator(Watch = true)]
 namespace ParallelLearning
 {
+    
     class Program
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         static int count = 0;
 
         static object baton = new object();
@@ -38,34 +41,46 @@ namespace ParallelLearning
             //Console.WriteLine("Leaving main");
             //Console.Read();
 
-            var thread1 = new Thread(IncrementCount);
-            var thread2 = new Thread(IncrementCount);
+            //var thread1 = new Thread(IncrementCount);
+            //var thread2 = new Thread(IncrementCount);
 
+            log.Error("First Log");
 
-            bool lockToken = false;
-            Monitor.Enter(baton,ref lockToken);
-            try
+            Counter d = new Counter();
+
+            log4net.GlobalContext.Properties["counter"] = d;
+
+            for (d.loopCounter = 0; d.loopCounter < 5; d.loopCounter++)
             {
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            finally
-            {
-                if(lockToken)
-                    Monitor.Exit(baton);
-
+                log.Fatal("this is the fatal msg");
             }
 
+            //bool lockToken = false;
+            //Monitor.Enter(baton,ref lockToken);
+            //try
+            //{
 
-            foreach (int i in Yeildbreak())
-                Console.WriteLine(i);
+            //}
+            //catch (Exception)
+            //{
+
+            //    throw;
+            //}
+            //finally
+            //{
+            //    if(lockToken)
+            //        Monitor.Exit(baton);
+
+            //}
 
 
-            Expression<Func<int, bool>> test = i => i < 5;
+            //foreach (int i in Yeildbreak())
+            //    Console.WriteLine(i);
+
+
+            //Expression<Func<int, bool>> test = i => i < 5;
+
+
             
             Console.Read();
 
